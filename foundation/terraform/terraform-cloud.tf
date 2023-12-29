@@ -82,6 +82,13 @@ resource "tfe_variable" "terraform_workspace_home_cloudflare_zone_name" {
   value        = data.cloudflare_zone.default.name
 }
 
+resource "tfe_variable" "terraform_workspace_home_home_public_ip_address" {
+  workspace_id = tfe_workspace.home.id
+  category     = "terraform"
+  key          = "home_public_ip_address"
+  value        = var.home_public_ip_address
+}
+
 resource "tfe_variable" "terraform_workspace_home_cloudflare_api_token" {
   workspace_id = tfe_workspace.home.id
   category     = "env"

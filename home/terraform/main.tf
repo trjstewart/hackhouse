@@ -50,3 +50,42 @@ resource "cloudflare_tunnel_config" "default" {
     }
   }
 }
+
+resource "cloudflare_access_application" "default" {
+  zone_id                   = data.cloudflare_zone.default.id
+  name                      = data.cloudflare_zone.default.name
+  domain                    = cloudflare_record.wildcard.hostname
+  type                      = "self_hosted"
+  session_duration          = "24h"
+
+  cors_headers {
+    allow_all_origins = true
+    allow_all_methods = true
+  }
+}
+
+resource "cloudflare_access_policy" "allow_home_public_ip_address" {
+  account_id = data.cloudflare_zone.default.account_id
+  application_id = cloudflare_access_application.default.id
+  name           = "allow-home-public-ip-address"
+  decision       = "bypass"
+  precedence     = "1"
+
+  include {
+    ip = [ var.home_public_ip_address ]
+  }
+}
+
+resource "cloudflare_access_policy" "allow_approved_email_addresses" {
+  account_id = data.cloudflare_zone.default.account_id
+  application_id = cloudflare_access_application.default.id
+  name           = "allow-approved-email-addresses"
+  decision       = "allow"
+  precedence     = "2"
+
+  include {
+    email = var.cloudflare_access_allowed_email_addresses
+  }
+
+  depends_on = [ cloudflare_access_policy.allow_home_public_ip_address ]
+}
