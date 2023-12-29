@@ -11,7 +11,7 @@ if [[ ! "${PWD##*/}" == "hackhouse" ]]; then
   exit 1
 fi
 
-for dir in foundation home; do (
+for dir in foundation home media; do (
   cd $dir || exit
   docker-compose up --wait
 ) done

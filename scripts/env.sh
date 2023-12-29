@@ -25,3 +25,9 @@ echo "DOMAIN_NAME=$(terraform -chdir=foundation/terraform output domain_name)" >
 echo "CLOUDFLARE_API_TOKEN_TRAEFIK_ZONE_READ=$(terraform -chdir=foundation/terraform output cloudflare_api_token_traefik_zone_read)" >> home/.env
 echo "CLOUDFLARE_API_TOKEN_TRAEFIK_DNS_WRITE=$(terraform -chdir=foundation/terraform output cloudflare_api_token_traefik_dns_write)" >> home/.env
 echo "CLOUDFLARE_TUNNEL_TOKEN=$(terraform -chdir=home/terraform output cloudflare_tunnel_token)" >> home/.env
+
+# Output Environment Variables for the `media` project
+touch media/.env
+echo "DOMAIN_NAME=$(terraform -chdir=foundation/terraform output domain_name)" >> media/.env
+echo "PRIVATE_INTERNET_ACCESS_USERNAME=\"$(op.exe read "op://Personal/Private Internet Access/user")\"" >> media/.env
+echo "PRIVATE_INTERNET_ACCESS_PASSWORD=\"$(op.exe read "op://Personal/Private Internet Access/pass")\"" >> media/.env

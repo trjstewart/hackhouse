@@ -1,0 +1,46 @@
+version: '3.8'
+
+x-common-environment-variables: &common-environment-variables
+  TZ: Australia/Brisbane
+  PUID: 1000
+  PGID: 1000
+
+services:
+  private-internet-access-vpn:
+    container_name: private-internet-access-vpn
+    image: thrnz/docker-wireguard-pia
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 8080:8080
+    environment:
+      LOCAL_NETWORK: 192.168.1.0/24
+      LOC: au_brisbane-pf,aus,aus_melbourne,au_adelaide-pf,aus_perth
+      USER: ${PRIVATE_INTERNET_ACCESS_USERNAME:?}
+      PASS: ${PRIVATE_INTERNET_ACCESS_PASSWORD:?}
+    labels:
+      traefik.enable: true
+      traefik.http.routers.qbittorrent.entrypoints: https
+      traefik.http.routers.qbittorrent.rule: Host(`qbittorrent.${DOMAIN_NAME}`)
+      traefik.http.services.qbittorrent.loadbalancer.server.port: 8080
+    networks:
+      - traefik
+  qbittorrent:
+    container_name: qbittorrent
+    image: lscr.io/linuxserver/qbittorrent:latest
+    restart: unless-stopped
+    environment:
+      <<: *common-environment-variables
+      UMASK: 002
+    volumes:
+      - /mnt/ssd/docker-volumes/media/qbittorrent/config:/config
+      - /mnt/hdd/docker-volumes/media/downloads/qbittorrent:/downloads
+    network_mode: service:private-internet-access-vpn
+    depends_on:
+      - private-internet-access-vpn
+
+networks:
+  traefik:
+    name: traefik
+    external: true

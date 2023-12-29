@@ -11,7 +11,7 @@ if [[ ! "${PWD##*/}" == "hackhouse" ]]; then
   exit 1
 fi
 
-for dir in home foundation; do (
+for dir in media home foundation; do (
   cd $dir || exit
   docker-compose down --remove-orphans
 ) done
