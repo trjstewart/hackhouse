@@ -2,8 +2,8 @@ version: '3.8'
 
 services:
   terraform-cloud-agent:
-    image: hashicorp/tfc-agent:latest
     container_name: terraform-cloud-agent
+    image: hashicorp/tfc-agent:latest
     restart: unless-stopped
     environment:
       TFC_AGENT_NAME: ${TERRAFORM_CLOUD_AGENT_NAME:-hackhouse-server}

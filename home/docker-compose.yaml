@@ -17,6 +17,18 @@ services:
       TUNNEL_LOGLEVEL: debug
     networks:
       - cloudflare
+  docker-socket-proxy-read-only:
+    container_name: docker-socket-proxy-read-only
+    image: tecnativa/docker-socket-proxy:latest
+    restart: unless-stopped
+    privileged: true
+    environment:
+      - POST=0 # Ensure we don't allow write access to the socket
+      - CONTAINERS=1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - docker-socket-proxy-read-only
   traefik:
     container_name: traefik
     image: traefik:latest
@@ -34,9 +46,9 @@ services:
       - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
       - --providers.docker
       - --providers.docker.exposedbydefault=false
+      - --providers.docker.endpoint=tcp://docker-socket-proxy-read-only:2375
     volumes:
       - "/mnt/ssd/docker-volumes/home/traefik/letsencrypt:/letsencrypt"
-      - /var/run/docker.sock:/var/run/docker.sock:ro # TODO: This should be provided by a read-only docker proxy container
     environment:
       <<: *common-environment-variables
       CF_ZONE_API_TOKEN: ${CLOUDFLARE_API_TOKEN_TRAEFIK_ZONE_READ:?}
@@ -47,9 +59,9 @@ services:
       traefik.http.routers.traefik.rule: Host(`traefik.${DOMAIN_NAME}`)
       traefik.http.routers.traefik.service: api@internal
     networks:
-      - cloudflare
       - traefik
-      - plex
+      - docker-socket-proxy-read-only
+      - cloudflare
   whoami:
     container_name: whoami
     image: traefik/whoami:latest
@@ -60,35 +72,14 @@ services:
       traefik.http.routers.whoami.rule: Host(`whoami.${DOMAIN_NAME}`)
     networks:
       - traefik
-  homarr:
-    container_name: homarr
-    image: ghcr.io/ajnart/homarr:latest
-    restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro # TODO: This should be provided by a read-only docker proxy container
-      - /mnt/ssd/docker-volumes/home/homarr/configs:/app/data/configs
-      - /mnt/ssd/docker-volumes/home/homarr/icons:/app/public/icons
-      - /mnt/ssd/docker-volumes/home/homarr/data:/data
-    environment:
-      <<: *common-environment-variables
-      DISABLE_ANALYTICS: true
-      BASE_URL: media.${DOMAIN_NAME}
-    labels:
-      traefik.enable: true
-      traefik.http.routers.media.entrypoints: https
-      traefik.http.routers.media.rule: Host(`media.${DOMAIN_NAME}`)
-      traefik.http.services.media.loadbalancer.server.port: 7575
-    networks:
-      - traefik
-      - plex
 
 networks:
   cloudflare:
     name: cloudflare
     driver: bridge
+  docker-socket-proxy-read-only:
+    name: docker-socket-proxy-read-only
+    driver: bridge
   traefik:
     name: traefik
-    driver: bridge
-  plex: # TODO: Move this to be created with the media stack
-    name: plex
     driver: bridge
