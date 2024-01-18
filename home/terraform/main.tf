@@ -20,7 +20,7 @@ resource "cloudflare_record" "wildcard" {
 }
 
 locals {
-  cloudflare_tunnel_subdomains_to_proxy = [ "traefik", "whoami", "qbittorrent" ]
+  cloudflare_tunnel_subdomains_to_proxy = [ "traefik", "whoami", "media", "qbittorrent", "sabnzbd", "prowlarr", "sonarr", "radarr", "plex", "overseerr" ]
 }
 
 resource "cloudflare_tunnel_config" "default" {

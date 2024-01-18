@@ -23,11 +23,25 @@ sudo mkdir -p $DOCKER_VOLUMES_ROOT_SSD $DOCKER_VOLUMES_ROOT_HDD
 sudo mkdir -p $DOCKER_VOLUMES_ROOT_SSD/home/traefik/letsencrypt
 sudo touch $DOCKER_VOLUMES_ROOT_SSD/home/traefik/letsencrypt/acme.json
 sudo chmod 600 $DOCKER_VOLUMES_ROOT_SSD/home/traefik/letsencrypt/acme.json
-sudo chown -R $(whoami):$(whoami) $DOCKER_VOLUMES_ROOT_SSD/home
+sudo mkdir -p $DOCKER_VOLUMES_ROOT_SSD/home/homarr/configs
+sudo mkdir -p $DOCKER_VOLUMES_ROOT_SSD/home/homarr/icons
+sudo mkdir -p $DOCKER_VOLUMES_ROOT_SSD/home/homarr/data
 
-# Create directories and files to be used for volumes in the `media` project and ensure everything inside them is owned by the current user
+# Create directories and files to be used for volumes in the `media` project
 sudo mkdir -p $DOCKER_VOLUMES_ROOT_SSD/media/qbittorrent/config
+sudo mkdir -p $DOCKER_VOLUMES_ROOT_SSD/media/sabnzbd/config
+sudo mkdir -p $DOCKER_VOLUMES_ROOT_HDD/media/Movies
+sudo mkdir -p "$DOCKER_VOLUMES_ROOT_HDD/media/TV Series"
+sudo mkdir -p $DOCKER_VOLUMES_ROOT_HDD/media/Anime
 sudo mkdir -p $DOCKER_VOLUMES_ROOT_HDD/media/downloads/qbittorrent/incomplete
+sudo mkdir -p $DOCKER_VOLUMES_ROOT_HDD/media/downloads/sabnzbd/complete
+sudo mkdir -p $DOCKER_VOLUMES_ROOT_HDD/media/downloads/sabnzbd/incomplete
+sudo mkdir -p $DOCKER_VOLUMES_ROOT_SSD/media/prowlarr/config
+sudo mkdir -p $DOCKER_VOLUMES_ROOT_SSD/media/sonarr/config
+sudo mkdir -p $DOCKER_VOLUMES_ROOT_SSD/media/radarr/config
+sudo mkdir -p $DOCKER_VOLUMES_ROOT_SSD/media/plex/config
+sudo mkdir -p $DOCKER_VOLUMES_ROOT_SSD/media/plex/transcode
+sudo mkdir -p $DOCKER_VOLUMES_ROOT_SSD/media/overseerr/config
 
 # Ensure everything is owned by the current user
 sudo chown -R $(whoami):$(whoami) $DOCKER_VOLUMES_ROOT_SSD

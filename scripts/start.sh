@@ -13,5 +13,5 @@ fi
 
 for dir in foundation home media; do (
   cd $dir || exit
-  docker-compose up --wait
+  docker-compose up --wait --remove-orphans
 ) done

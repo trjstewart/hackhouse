@@ -49,6 +49,7 @@ services:
     networks:
       - cloudflare
       - traefik
+      - plex
   whoami:
     container_name: whoami
     image: traefik/whoami:latest
@@ -59,6 +60,27 @@ services:
       traefik.http.routers.whoami.rule: Host(`whoami.${DOMAIN_NAME}`)
     networks:
       - traefik
+  homarr:
+    container_name: homarr
+    image: ghcr.io/ajnart/homarr:latest
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro # TODO: This should be provided by a read-only docker proxy container
+      - /mnt/ssd/docker-volumes/home/homarr/configs:/app/data/configs
+      - /mnt/ssd/docker-volumes/home/homarr/icons:/app/public/icons
+      - /mnt/ssd/docker-volumes/home/homarr/data:/data
+    environment:
+      <<: *common-environment-variables
+      DISABLE_ANALYTICS: true
+      BASE_URL: media.${DOMAIN_NAME}
+    labels:
+      traefik.enable: true
+      traefik.http.routers.media.entrypoints: https
+      traefik.http.routers.media.rule: Host(`media.${DOMAIN_NAME}`)
+      traefik.http.services.media.loadbalancer.server.port: 7575
+    networks:
+      - traefik
+      - plex
 
 networks:
   cloudflare:
@@ -66,4 +88,7 @@ networks:
     driver: bridge
   traefik:
     name: traefik
+    driver: bridge
+  plex: # TODO: Move this to be created with the media stack
+    name: plex
     driver: bridge
