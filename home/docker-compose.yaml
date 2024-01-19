@@ -46,7 +46,7 @@ services:
       - --providers.docker.exposedbydefault=false
       - --providers.docker.endpoint=tcp://docker-socket-proxy-read-only:2375
     volumes:
-      - "/mnt/ssd/docker-volumes/home/traefik/letsencrypt:/letsencrypt"
+      - "/mnt/wsl/ssd/docker-volumes/home/traefik/letsencrypt:/letsencrypt"
     environment:
       <<: *common-environment-variables
       CF_ZONE_API_TOKEN: ${CLOUDFLARE_API_TOKEN_TRAEFIK_ZONE_READ:?}
