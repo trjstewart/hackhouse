@@ -15,7 +15,6 @@ services:
   private-internet-access-vpn:
     container_name: private-internet-access-vpn
     image: thrnz/docker-wireguard-pia:latest
-    restart: unless-stopped
     cap_add:
       - NET_ADMIN
     environment:
@@ -35,7 +34,6 @@ services:
   sabnzbd:
     container_name: sabnzbd
     image: lscr.io/linuxserver/sabnzbd:latest
-    restart: unless-stopped
     environment:
       <<: *common-environment-variables
     volumes:
