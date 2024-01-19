@@ -45,6 +45,19 @@ services:
       traefik.http.routers.sabnzbd.rule: Host(`sabnzbd.${DOMAIN_NAME}`)
       traefik.http.services.sabnzbd.loadbalancer.server.port: 8080
     <<: *use-private-internet-access-vpn
+  prowlarr:
+    container_name: prowlarr
+    image: lscr.io/linuxserver/prowlarr:latest
+    environment:
+      <<: *common-environment-variables
+    volumes:
+      - /mnt/ssd/docker-volumes/media/prowlarr/config:/config
+    labels:
+      traefik.enable: true
+      traefik.http.routers.prowlarr.entrypoints: https
+      traefik.http.routers.prowlarr.rule: Host(`prowlarr.${DOMAIN_NAME}`)
+      traefik.http.services.prowlarr.loadbalancer.server.port: 9696
+    <<: *use-private-internet-access-vpn
 
 networks:
   traefik:
