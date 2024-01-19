@@ -4,7 +4,6 @@ services:
   terraform-cloud-agent:
     container_name: terraform-cloud-agent
     image: hashicorp/tfc-agent:latest
-    restart: unless-stopped
     environment:
       TFC_AGENT_NAME: ${TERRAFORM_CLOUD_AGENT_NAME:-hackhouse-server}
       TFC_AGENT_TOKEN: ${TERRAFORM_CLOUD_AGENT_TOKEN:?}

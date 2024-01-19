@@ -9,7 +9,6 @@ services:
   cloudflare-tunnel:
     container_name: cloudflare-tunnel
     image: cloudflare/cloudflared:latest
-    restart: unless-stopped
     command: tunnel run
     environment:
       TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN:?}
@@ -20,7 +19,6 @@ services:
   docker-socket-proxy-read-only:
     container_name: docker-socket-proxy-read-only
     image: tecnativa/docker-socket-proxy:latest
-    restart: unless-stopped
     privileged: true
     environment:
       - POST=0 # Ensure we don't allow write access to the socket
