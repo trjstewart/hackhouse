@@ -44,6 +44,17 @@ sudo touch $FAST_DOCKER_VOLUMES_ROOT/home/traefik/letsencrypt/acme.json
 sudo chmod 600 $FAST_DOCKER_VOLUMES_ROOT/home/traefik/letsencrypt/acme.json
 
 # ---------------------------------------------------------------------------------------------------------------------
+# Create directories and files to be used for volumes in the `media` project
+# ---------------------------------------------------------------------------------------------------------------------
+# Things for SABnzbd
+sudo mkdir -p $FAST_DOCKER_VOLUMES_ROOT/media/sabnzbd/config
+sudo mkdir -p $LARGE_DOCKER_VOLUMES_ROOT/media/downloads/sabnzbd/incomplete
+sudo mkdir -p $LARGE_DOCKER_VOLUMES_ROOT/media/downloads/sabnzbd/complete
+sudo mkdir -p $LARGE_DOCKER_VOLUMES_ROOT/media/downloads/sabnzbd/complete/movies
+sudo mkdir -p $LARGE_DOCKER_VOLUMES_ROOT/media/downloads/sabnzbd/complete/series
+sudo mkdir -p $LARGE_DOCKER_VOLUMES_ROOT/media/downloads/sabnzbd/complete/anime
+
+# ---------------------------------------------------------------------------------------------------------------------
 # Ensure everything is owned by the current user
 # ---------------------------------------------------------------------------------------------------------------------
 sudo chown -R $(whoami):$(whoami) $FAST_DOCKER_VOLUMES_ROOT $LARGE_DOCKER_VOLUMES_ROOT

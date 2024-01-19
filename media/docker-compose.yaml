@@ -1,0 +1,54 @@
+version: '3.8'
+
+x-common-environment-variables: &common-environment-variables
+  TZ: Australia/Brisbane
+  PUID: 1000
+  PGID: 1000
+
+x-use-private-internet-access-vpn: &use-private-internet-access-vpn
+  network_mode: service:private-internet-access-vpn
+  depends_on:
+    private-internet-access-vpn:
+      condition: service_healthy
+
+services:
+  private-internet-access-vpn:
+    container_name: private-internet-access-vpn
+    image: thrnz/docker-wireguard-pia:latest
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    environment:
+      LOCAL_NETWORK: 192.168.1.0/24
+      LOC: swiss # au_brisbane-pf,aus,aus_melbourne,au_adelaide-pf,aus_perth
+      USER: ${PRIVATE_INTERNET_ACCESS_USERNAME:?}
+      PASS: ${PRIVATE_INTERNET_ACCESS_PASSWORD:?}
+    networks:
+      - traefik
+    healthcheck:
+      test: ping -c 1 one.one.one.one || exit 1
+      start_period: 1m
+      start_interval: 1s
+      interval: 30s
+      timeout: 10s
+      retries: 3
+  sabnzbd:
+    container_name: sabnzbd
+    image: lscr.io/linuxserver/sabnzbd:latest
+    restart: unless-stopped
+    environment:
+      <<: *common-environment-variables
+    volumes:
+      - /mnt/wsl/ssd/docker-volumes/media/sabnzbd/config:/config
+      - /mnt/wsl/hdd/docker-volumes/media:/media
+    labels:
+      traefik.enable: true
+      traefik.http.routers.sabnzbd.entrypoints: https
+      traefik.http.routers.sabnzbd.rule: Host(`sabnzbd.${DOMAIN_NAME}`)
+      traefik.http.services.sabnzbd.loadbalancer.server.port: 8080
+    <<: *use-private-internet-access-vpn
+
+networks:
+  traefik:
+    name: traefik
+    external: true
