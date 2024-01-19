@@ -8,6 +8,13 @@ The foundation of this project is a single terraform workspace called exactly th
 
 Some of this configuration poses a bit of a chicken and egg situation though. Namely that we need the _terraform-cloud-agent_ up and running before we can apply the _foundation_ workspace remotely, but we want to create that agent within that workspace! To facilitate this, we're going to start with the _foundation_ workspace as local state and migrate it into Terraform Cloud once it's creates its own new home.
 
-### Storage
+### Windows Subsystem for Linux (WSL) Storage
 
-If we're running within WSL then we'll likely want to mount additional disks for media storage at the very least. This can be done by following a simple Microsoft guide to [Mount a Linux disk in WSL 2](https://learn.microsoft.com/en-us/windows/wsl/wsl2-mount-disk).
+Unfortunately running this within WSL rather than a on dedicated host makes things a little bit complicated. This is because we rely on drives being mounted directly to WSL for storage and while WSL does allow the mounting of physical disks via the `wsl --mount` command, those drives are not persisted between reboots of WSL. Ultimately, that can (and will) result in Docker unintentionally creating volumes in directories on your primary drive.
+
+Mileage may vary between hosts but for the most part you should be able to follow [this guide](https://learn.microsoft.com/en-us/windows/wsl/wsl2-mount-disk), [this GitHub Issue](https://github.com/microsoft/WSL/issues/6073#issuecomment-1266405095), and a sprinkling of [this guide](https://medium.com/@stefan.berkner/automatically-starting-an-external-encrypted-ssd-in-windows-subsystem-wsl-6403c34e9680) to get your disks auto mounted when WSL starts. Your mount commands should look something like below if you're me.
+
+``` powershell
+wsl --mount \\.\PHYSICALDRIVE0 --partition 1 --type ext4 --name ssd
+wsl --mount \\.\PHYSICALDRIVE1 --partition 1 --type ext4 --name hdd
+```

@@ -22,6 +22,10 @@ if ! sudo -v; then print_error_and_exit "You must have sudo access to run this s
 if [[ -f "/proc/version" ]] && grep -q microsoft-standard-WSL2 /proc/version; then
   if ! lsblk | grep -q $FAST_STORAGE_LOCATION; then print_error_and_exit "The fast disk is not mounted!"; fi
   if ! lsblk | grep -q $LARGE_STORAGE_LOCATION; then print_error_and_exit "The large disk is not mounted!"; fi
+
+  # Also do a sanity check that the disks are actually mounted as we expect them to be
+  if [[ ! $(cat $FAST_STORAGE_LOCATION/expected-mount-path) == $FAST_STORAGE_LOCATION ]]; then print_error_and_exit "The fast disk is not mounted as expected!"; fi
+  if [[ ! $(cat $LARGE_STORAGE_LOCATION/expected-mount-path) == $LARGE_STORAGE_LOCATION ]]; then print_error_and_exit "The large disk is not mounted as expected!"; fi
 fi
 
 # ---------------------------------------------------------------------------------------------------------------------
