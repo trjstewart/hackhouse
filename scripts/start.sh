@@ -11,5 +11,6 @@ if [[ -e ./scripts/volumes.sh ]]; then . ./scripts/volumes.sh; else error_messag
 
 for dir in foundation home media; do (
   cd $dir || exit
+  docker-compose pull
   docker-compose up --wait --remove-orphans
 ) done
