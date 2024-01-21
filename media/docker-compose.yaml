@@ -51,7 +51,7 @@ services:
     environment:
       <<: *common-environment-variables
     volumes:
-      - /mnt/ssd/docker-volumes/media/prowlarr/config:/config
+      - /mnt/wsl/ssd/docker-volumes/media/prowlarr/config:/config
     labels:
       traefik.enable: true
       traefik.http.routers.prowlarr.entrypoints: https
