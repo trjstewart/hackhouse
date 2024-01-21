@@ -81,3 +81,6 @@ networks:
   traefik:
     name: traefik
     driver: bridge
+  plex:
+    name: plex
+    external: true

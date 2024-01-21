@@ -61,6 +61,10 @@ sudo mkdir -p $FAST_DOCKER_VOLUMES_ROOT/media/sonarr/config
 sudo mkdir -p $LARGE_DOCKER_VOLUMES_ROOT/media/downloads/sabnzbd/complete/sonarr
 sudo mkdir -p $LARGE_DOCKER_VOLUMES_ROOT/media/series
 
+# Things for Plex
+sudo mkdir -p $FAST_DOCKER_VOLUMES_ROOT/media/plex/config
+sudo mkdir -p $FAST_DOCKER_VOLUMES_ROOT/media/plex/transcode
+
 # ---------------------------------------------------------------------------------------------------------------------
 # Ensure everything is owned by the current user
 # ---------------------------------------------------------------------------------------------------------------------

@@ -24,6 +24,7 @@ services:
       PASS: ${PRIVATE_INTERNET_ACCESS_PASSWORD:?}
     networks:
       - traefik
+      - plex
     healthcheck:
       test: ping -c 1 one.one.one.one || exit 1
       start_period: 1m
@@ -72,8 +73,37 @@ services:
       traefik.http.routers.sonarr.rule: Host(`sonarr.${DOMAIN_NAME}`)
       traefik.http.services.sonarr.loadbalancer.server.port: 8989
     <<: *use-private-internet-access-vpn
+  plex:
+    container_name: plex
+    image: plexinc/pms-docker:latest
+    environment:
+      <<: *common-environment-variables
+      PLEX_UID: 1000
+      PLEX_GID: 1000
+    ports: # https://support.plex.tv/articles/201543147-what-network-ports-do-i-need-to-allow-through-my-firewall/
+      - 32400:32400/tcp  # Plex Media Server
+      - 32469:32469/tcp  # Plex DLNA Server
+      - 1900:1900/udp    # Plex DLNA Server
+      - 32410:32410/udp  # Plex GDM Network Discovery
+      - 32412:32412/udp  # Plex GDM Network Discovery
+      - 32413:32413/udp  # Plex GDM Network Discovery
+      - 32414:32414/udp  # Plex GDM Network Discovery
+    volumes:
+      - /mnt/wsl/ssd/docker-volumes/media/plex/config:/config
+      - /mnt/wsl/ssd/docker-volumes/media/plex/transcode:/transcode
+      - /mnt/wsl/hdd/docker-volumes/media:/media
+    labels:
+      traefik.enable: true
+      traefik.http.routers.plex.entrypoints: https
+      traefik.http.routers.plex.rule: Host(`plex.${DOMAIN_NAME}`)
+      traefik.http.services.plex.loadbalancer.server.port: 32400
+    networks:
+      - plex
 
 networks:
   traefik:
     name: traefik
     external: true
+  plex:
+    name: plex
+    driver: bridge
