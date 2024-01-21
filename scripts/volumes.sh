@@ -50,13 +50,16 @@ sudo chmod 600 $FAST_DOCKER_VOLUMES_ROOT/home/traefik/letsencrypt/acme.json
 sudo mkdir -p $FAST_DOCKER_VOLUMES_ROOT/media/sabnzbd/config
 sudo mkdir -p $LARGE_DOCKER_VOLUMES_ROOT/media/downloads/sabnzbd/incomplete
 sudo mkdir -p $LARGE_DOCKER_VOLUMES_ROOT/media/downloads/sabnzbd/complete
-sudo mkdir -p $LARGE_DOCKER_VOLUMES_ROOT/media/downloads/sabnzbd/complete/sonarr
 sudo mkdir -p $LARGE_DOCKER_VOLUMES_ROOT/media/downloads/sabnzbd/complete/radarr
 
 # Things for Prowlarr
 sudo mkdir -p $FAST_DOCKER_VOLUMES_ROOT/media/prowlarr/config
 sudo mkdir -p $LARGE_DOCKER_VOLUMES_ROOT/media/downloads/sabnzbd/complete/prowlarr
 
+# Things for Sonarr
+sudo mkdir -p $FAST_DOCKER_VOLUMES_ROOT/media/sonarr/config
+sudo mkdir -p $LARGE_DOCKER_VOLUMES_ROOT/media/downloads/sabnzbd/complete/sonarr
+sudo mkdir -p $LARGE_DOCKER_VOLUMES_ROOT/media/series
 
 # ---------------------------------------------------------------------------------------------------------------------
 # Ensure everything is owned by the current user
