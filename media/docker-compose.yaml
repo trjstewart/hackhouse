@@ -50,6 +50,21 @@ services:
       traefik.http.routers.sonarr.entrypoints: https
       traefik.http.routers.sonarr.rule: Host(`sonarr.${DOMAIN_NAME}`)
       traefik.http.services.sonarr.loadbalancer.server.port: 8989
+  radarr:
+    container_name: radarr
+    image: lscr.io/linuxserver/radarr:latest
+    environment:
+      <<: *common-environment-variables
+    volumes:
+      - /mnt/wsl/ssd/docker-volumes/media/radarr/config:/config
+      - /mnt/wsl/hdd/docker-volumes/media:/media
+    networks:
+      - traefik
+    labels:
+      traefik.enable: true
+      traefik.http.routers.radarr.entrypoints: https
+      traefik.http.routers.radarr.rule: Host(`radarr.${DOMAIN_NAME}`)
+      traefik.http.services.radarr.loadbalancer.server.port: 7878
   plex:
     container_name: plex
     image: plexinc/pms-docker:latest
