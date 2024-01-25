@@ -24,7 +24,7 @@ services:
       PASS: ${PRIVATE_INTERNET_ACCESS_PASSWORD:?}
     networks:
       - traefik
-      - plex
+      # - plex
     healthcheck:
       test: ping -c 1 one.one.one.one || exit 1
       start_period: 1m
@@ -99,6 +99,21 @@ services:
       traefik.http.services.plex.loadbalancer.server.port: 32400
     networks:
       - plex
+      - traefik
+  overseerr:
+    container_name: overseerr
+    image: lscr.io/linuxserver/overseerr:latest
+    environment:
+      <<: *common-environment-variables
+    volumes:
+      - /mnt/wsl/ssd/docker-volumes/media/overseerr/config:/config
+      - /mnt/wsl/hdd/docker-volumes/media:/media
+    labels:
+      traefik.enable: true
+      traefik.http.routers.overseerr.entrypoints: https
+      traefik.http.routers.overseerr.rule: Host(`overseerr.${DOMAIN_NAME}`)
+      traefik.http.services.overseerr.loadbalancer.server.port: 5055
+    <<: *use-private-internet-access-vpn
 
 networks:
   traefik:
