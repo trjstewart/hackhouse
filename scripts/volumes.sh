@@ -65,6 +65,9 @@ sudo mkdir -p $LARGE_DOCKER_VOLUMES_ROOT/media/series
 sudo mkdir -p $FAST_DOCKER_VOLUMES_ROOT/media/plex/config
 sudo mkdir -p $FAST_DOCKER_VOLUMES_ROOT/media/plex/transcode
 
+# Things for Overseer
+sudo mkdir -p $FAST_DOCKER_VOLUMES_ROOT/media/overseer/config
+
 # ---------------------------------------------------------------------------------------------------------------------
 # Ensure everything is owned by the current user
 # ---------------------------------------------------------------------------------------------------------------------
