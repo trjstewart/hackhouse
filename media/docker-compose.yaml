@@ -5,33 +5,7 @@ x-common-environment-variables: &common-environment-variables
   PUID: 1000
   PGID: 1000
 
-x-use-private-internet-access-vpn: &use-private-internet-access-vpn
-  network_mode: service:private-internet-access-vpn
-  depends_on:
-    private-internet-access-vpn:
-      condition: service_healthy
-
 services:
-  private-internet-access-vpn:
-    container_name: private-internet-access-vpn
-    image: thrnz/docker-wireguard-pia:latest
-    cap_add:
-      - NET_ADMIN
-    environment:
-      LOCAL_NETWORK: 192.168.1.0/24
-      LOC: swiss # au_brisbane-pf,aus,aus_melbourne,au_adelaide-pf,aus_perth
-      USER: ${PRIVATE_INTERNET_ACCESS_USERNAME:?}
-      PASS: ${PRIVATE_INTERNET_ACCESS_PASSWORD:?}
-    networks:
-      - traefik
-      # - plex
-    healthcheck:
-      test: ping -c 1 one.one.one.one || exit 1
-      start_period: 1m
-      start_interval: 1s
-      interval: 30s
-      timeout: 10s
-      retries: 3
   sabnzbd:
     container_name: sabnzbd
     image: lscr.io/linuxserver/sabnzbd:latest
@@ -40,12 +14,13 @@ services:
     volumes:
       - /mnt/wsl/ssd/docker-volumes/media/sabnzbd/config:/config
       - /mnt/wsl/hdd/docker-volumes/media:/media
+    networks:
+      - traefik
     labels:
       traefik.enable: true
       traefik.http.routers.sabnzbd.entrypoints: https
       traefik.http.routers.sabnzbd.rule: Host(`sabnzbd.${DOMAIN_NAME}`)
       traefik.http.services.sabnzbd.loadbalancer.server.port: 8080
-    <<: *use-private-internet-access-vpn
   prowlarr:
     container_name: prowlarr
     image: lscr.io/linuxserver/prowlarr:latest
@@ -53,12 +28,13 @@ services:
       <<: *common-environment-variables
     volumes:
       - /mnt/wsl/ssd/docker-volumes/media/prowlarr/config:/config
+    networks:
+      - traefik
     labels:
       traefik.enable: true
       traefik.http.routers.prowlarr.entrypoints: https
       traefik.http.routers.prowlarr.rule: Host(`prowlarr.${DOMAIN_NAME}`)
       traefik.http.services.prowlarr.loadbalancer.server.port: 9696
-    <<: *use-private-internet-access-vpn
   sonarr:
     container_name: sonarr
     image: lscr.io/linuxserver/sonarr:latest
@@ -67,12 +43,13 @@ services:
     volumes:
       - /mnt/wsl/ssd/docker-volumes/media/sonarr/config:/config
       - /mnt/wsl/hdd/docker-volumes/media:/media
+    networks:
+      - traefik
     labels:
       traefik.enable: true
       traefik.http.routers.sonarr.entrypoints: https
       traefik.http.routers.sonarr.rule: Host(`sonarr.${DOMAIN_NAME}`)
       traefik.http.services.sonarr.loadbalancer.server.port: 8989
-    <<: *use-private-internet-access-vpn
   plex:
     container_name: plex
     image: plexinc/pms-docker:latest
@@ -92,14 +69,13 @@ services:
       - /mnt/wsl/ssd/docker-volumes/media/plex/config:/config
       - /mnt/wsl/ssd/docker-volumes/media/plex/transcode:/transcode
       - /mnt/wsl/hdd/docker-volumes/media:/media
+    networks:
+      - traefik
     labels:
       traefik.enable: true
       traefik.http.routers.plex.entrypoints: https
       traefik.http.routers.plex.rule: Host(`plex.${DOMAIN_NAME}`)
       traefik.http.services.plex.loadbalancer.server.port: 32400
-    networks:
-      - plex
-      - traefik
   overseerr:
     container_name: overseerr
     image: lscr.io/linuxserver/overseerr:latest
@@ -108,17 +84,15 @@ services:
     volumes:
       - /mnt/wsl/ssd/docker-volumes/media/overseerr/config:/config
       - /mnt/wsl/hdd/docker-volumes/media:/media
+    networks:
+      - traefik
     labels:
       traefik.enable: true
       traefik.http.routers.overseerr.entrypoints: https
       traefik.http.routers.overseerr.rule: Host(`overseerr.${DOMAIN_NAME}`)
       traefik.http.services.overseerr.loadbalancer.server.port: 5055
-    <<: *use-private-internet-access-vpn
 
 networks:
   traefik:
     name: traefik
     external: true
-  plex:
-    name: plex
-    driver: bridge
