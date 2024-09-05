@@ -14,7 +14,7 @@ I picked up a couple of second hand [Dell Optiplex 7070 Micro](https://www.dell.
 
 ### Storage
 
-This part is a little tbd. Currently I'm waiting on [Ubiquiti](https://www.ui.com) to release a NAS. However, there's a solid chance I'll cave soon and build a server to run [TrueNAS](https://www.truenas.com). Until all of that though, I've picked up an [Orico 3.5in External Hard Drive Enclosure](https://www.orico.cc/usmobile/product/detail/id/3518) to throw an old [Seagate IronWolf Pro 8TB](https://www.seagate.com/au/en/products/nas-drives/ironwolf-pro-hard-drive) drive in, which I'm going to front with [TrueNAS](https://www.truenas.com) to learn a bit about it. That should tide me over for a while.
+This part is a little tbd. Currently I'm waiting on [Ubiquiti](https://www.ui.com) to release a NAS. However, there's a solid chance I'll cave soon and build a server to run [TrueNAS](https://www.truenas.com). Until all of that though, I've picked up an [Orico 3.5in External Hard Drive Enclosure](https://www.orico.cc/usmobile/product/detail/id/3518) to throw an old [Seagate IronWolf Pro 8TB](https://www.seagate.com/au/en/products/nas-drives/ironwolf-pro-hard-drive) drive in, which I'm going to front with [TrueNAS Scale](https://www.truenas.com/truenas-scale) to learn a bit about it. That should tide me over for a while.
 
 ## 🧰 The Hypervisor
 
@@ -30,7 +30,7 @@ Normally I'd never run some random script from GitHub on any machine I own. Howe
 bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/post-pve-install.sh)"
 ```
 
-## 👶 The First Virtual Machine (TrueNAS)
+## 👶 The First Virtual Machine (TrueNAS Scale)
 
 Who would have thought there are still more decisions to be made.
 
