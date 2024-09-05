@@ -2,7 +2,7 @@
 
 The (hopefully) final form of my personal homelab for quite a while.
 
-## 🧱 The Hardware
+## ⚒️ The Hardware
 
 ### Networking
 
@@ -30,10 +30,11 @@ Normally I'd never run some random script from GitHub on any machine I own. Howe
 bash -c "$(wget -qLO - https://github.com/tteck/Proxmox/raw/main/misc/post-pve-install.sh)"
 ```
 
-## 👶 The First Virtual Machine (TrueNAS Scale)
+## 🧅 Orchestrating Different Layers
 
-Who would have thought there are still more decisions to be made.
+From here on out, everything that can be automated will be. This will mean that breaking things up into various different layers or `stacks` will help us separate out components that have various dependencies or frequencies of change. Each of these stacks will have their own readme detailing what its purpose is.
 
-https://pve.proxmox.com/wiki/Passthrough_Physical_Disk_to_Virtual_Machine_(VM)
+### 📚 Stacks
 
-lsblk |awk 'NR==1{print $0" DEVICE-ID(S)"}NR>1{dev=$1;printf $0" ";system("find /dev/disk/by-id -lname \"\*"dev"\" -printf \" %p\"");print "";}'|grep -v -E 'part|lvm'
+0. [Foundation](./stacks/foundation/readme.md)
+1. Whatever's Next...
