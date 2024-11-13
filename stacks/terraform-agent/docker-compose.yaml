@@ -1,0 +1,8 @@
+services:
+  terraform-cloud-agent:
+    container_name: terraform-cloud-agent
+    image: hashicorp/tfc-agent:latest
+    environment:
+      TFC_AGENT_NAME: ${TERRAFORM_CLOUD_AGENT_NAME:-hackhouse-server}
+      TFC_AGENT_TOKEN: ${TERRAFORM_CLOUD_AGENT_TOKEN:?}
+      TFC_AGENT_LOG_JSON: true
