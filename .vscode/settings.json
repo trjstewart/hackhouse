@@ -1,3 +1,21 @@
 {
-  "cSpell.words": ["homelab", "Optiplex", "prosumer", "siderolabs", "Ubiquiti"]
+  "cSpell.words": [
+    "homelab",
+    "inara",
+    "kaylee",
+    "nocloud",
+    "Optiplex",
+    "prosumer",
+    "siderolabs",
+    "Ubiquiti",
+    "ucode",
+    "yamlencode",
+    "controlplane",
+    "talosconfig",
+    "kubeconfig",
+    "tteck",
+    "Orico",
+    "automagically",
+    "wittling"
+  ]
 }

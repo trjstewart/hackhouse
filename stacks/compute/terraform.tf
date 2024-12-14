@@ -1,7 +1,7 @@
 terraform {
   cloud {
     organization = "hackhouse"
-    workspaces { name = "foundation" }
+    workspaces { name = "compute" }
   }
 
   required_providers {
@@ -18,6 +18,11 @@ terraform {
     tfe = {
       source  = "hashicorp/tfe"
       version = ">=0.60.0, <1.0.0"
+    }
+
+    talos = {
+      source  = "siderolabs/talos"
+      version = ">=0.6.1, <1.0.0"
     }
   }
 }

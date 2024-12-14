@@ -37,4 +37,11 @@ From here on out, everything that can be automated will be. This will mean that 
 ### 📚 Stacks
 
 0. [Foundation](./stacks/foundation/readme.md)
-1. Whatever's Next...
+1. [Compute](./stacks/compute/readme.md)
+2. Whatever's Next...
+
+![Diagram showing the hierarchy of the Stacks and how they compose together](./images/stacks.excalidraw.svg)
+
+### ✅ Things left to do... <!-- markdownlint-disable-line MD026 -->
+
+1. Figure out how to use certificates for the Proxmox provider rather than root credentials.
